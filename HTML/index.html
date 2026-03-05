@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>☕ Кофейня</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #1a1008;
+  color: #f5ebe0;
+  min-height: 100vh;
+}
+
+header {
+  background: #2c1a0e;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 2px solid #6f4e37;
+}
+header h1 { font-size: 1.6rem; color: #d4a373; }
+
+nav {
+  display: flex;
+  gap: 6px;
+  padding: 16px 32px 0;
+}
+nav button {
+  background: none;
+  border: 2px solid #6f4e37;
+  color: #d4a373;
+  padding: 8px 22px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-size: .9rem;
+}
+nav button.active {
+  background: #2c1a0e;
+  border-bottom-color: #2c1a0e;
+  color: #f5ebe0;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+/* ─── ORDER FORM ─── */
+.form-wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+.card {
+  background: #2c1a0e;
+  border-radius: 14px;
+  padding: 28px;
+  border: 1px solid #6f4e37;
+  margin-bottom: 16px;
+}
+h2 { font-size: 1.2rem; color: #d4a373; margin-bottom: 18px; }
+h3 { font-size: 1rem; color: #c8a98e; margin-bottom: 12px; }
+
+.field { margin-bottom: 18px; }
+label { display: block; margin-bottom: 5px; color: #c8a98e; font-size: .85rem; }
+
+input[type=text], input[type=tel], textarea {
+  width: 100%;
+  background: #1a1008;
+  border: 1px solid #6f4e37;
+  color: #f5ebe0;
+  padding: 10px 13px;
+  border-radius: 8px;
+  font-size: .95rem;
+  outline: none;
+}
+input:focus, textarea:focus { border-color: #d4a373; }
+textarea { resize: vertical; min-height: 72px; }
+
+/* Категории */
+.cat-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.cat-tab {
+  background: #1a1008;
+  border: 1px solid #6f4e37;
+  color: #c8a98e;
+  padding: 5px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: .85rem;
+}
+.cat-tab.active { background: #6f4e37; color: #fff; border-color: #6f4e37; }
+
+/* Напитки */
+.drink-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.drink-card {
+  background: #1a1008;
+  border: 2px solid #3d2210;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.drink-card:hover { border-color: #6f4e37; }
+.drink-card.selected { border-color: #d4a373; background: #3d2210; }
+.drink-card .d-name { font-size: .9rem; margin-bottom: 2px; }
+.drink-card .d-meta { font-size: .75rem; color: #a08060; }
+.drink-card .d-price { font-size: .9rem; color: #d4a373; margin-top: 4px; font-weight: 600; }
+
+/* Температура */
+.temp-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.temp-btn {
+  flex: 1;
+  background: #1a1008;
+  border: 2px solid #3d2210;
+  color: #f5ebe0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: .9rem;
+  text-align: center;
+}
+.temp-btn.active { border-color: #d4a373; background: #3d2210; }
+
+/* Модификаторы */
+.mod-section { margin-bottom: 16px; }
+.mod-section h4 { font-size: .85rem; color: #a08060; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  background: #1a1008;
+  border: 1px solid #6f4e37;
+  color: #f5ebe0;
+  padding: 5px 13px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: .82rem;
+  transition: all .15s;
+}
+.chip:hover { border-color: #d4a373; }
+.chip.selected { background: #3d2210; border-color: #d4a373; color: #d4a373; }
+/* Молоко особый цвет */
+.chip.milk.selected { background: #102030; border-color: #90caf9; color: #90caf9; }
+
+/* Итого */
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid #3d2210;
+  margin-top: 4px;
+}
+.price-lbl { color: #c8a98e; }
+.price-val { font-size: 1.5rem; font-weight: 700; color: #d4a373; }
+
+.btn-order {
+  width: 100%;
+  background: #6f4e37;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-order:hover { background: #8b6348; }
+.btn-order:disabled { opacity: .5; cursor: default; }
+
+.success { display: none; background: #0d2b1a; border: 1px solid #52b788; border-radius: 10px; padding: 16px; text-align: center; color: #52b788; margin-top: 14px; }
+
+/* ─── BARISTA PANEL ─── */
+.panel { padding: 24px 32px; }
+.panel-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.btn-refresh { background: #6f4e37; color: #fff; border: none; padding: 7px 18px; border-radius: 7px; cursor: pointer; font-size: .85rem; }
+
+table { width: 100%; border-collapse: collapse; background: #2c1a0e; border-radius: 12px; overflow: hidden; }
+thead { background: #3d2210; }
+th { padding: 12px 14px; text-align: left; color: #d4a373; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+td { padding: 10px 14px; border-top: 1px solid #3d2210; font-size: .85rem; vertical-align: top; }
+tr:hover td { background: #3a2010; }
+
+.status-sel {
+  background: #1a1008; border: 1px solid #6f4e37; color: #f5ebe0;
+  padding: 4px 8px; border-radius: 6px; font-size: .82rem; cursor: pointer;
+}
+
+.items-list { font-size: .8rem; color: #c8a98e; margin-top: 2px; }
+.comment-cell { color: #8a7060; font-style: italic; }
+
+.loading { text-align: center; color: #777; padding: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <span>☕</span>
+  <h1>Кофейня</h1>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('order', this)">Сделать заказ</button>
+  <button onclick="switchTab('barista', this)">Панель баристы</button>
+</nav>
+
+<!-- ════ ЗАКАЗ ════ -->
+<div id="order" class="page active">
+<div class="form-wrap">
+
+  <!-- Клиент -->
+  <div class="card">
+    <h2>Ваши данные</h2>
+    <div class="field">
+      <label>Имя *</label>
+      <input type="text" id="name" placeholder="Иван" />
+    </div>
+    <div class="field">
+      <label>Телефон *</label>
+      <input type="tel" id="phone" placeholder="+7 999 000 00 00" />
+    </div>
+  </div>
+
+  <!-- Выбор напитка -->
+  <div class="card">
+    <h2>Напиток</h2>
+
+    <!-- Горячий / холодный -->
+    <div class="temp-row">
+      <button class="temp-btn active" id="btnHot"  onclick="setTemp(true)">🔥 Горячий</button>
+      <button class="temp-btn"        id="btnCold" onclick="setTemp(false)">🧊 Холодный</button>
+    </div>
+
+    <!-- Вкладки категорий -->
+    <div class="cat-tabs" id="catTabs"></div>
+
+    <!-- Напитки -->
+    <div class="drink-grid" id="drinkGrid">
+      <div class="loading">Загрузка меню...</div>
+    </div>
+  </div>
+
+  <!-- Модификаторы -->
+  <div class="card" id="modsCard">
+    <h2>Добавки</h2>
+    <div id="modsContainer"></div>
+  </div>
+
+  <!-- Комментарий -->
+  <div class="card">
+    <h2>Комментарий</h2>
+    <textarea id="comment" placeholder="Без сахара, диабетик, побольше пены..."></textarea>
+  </div>
+
+  <!-- Итого -->
+  <div class="card">
+    <div class="price-row">
+      <span class="price-lbl">Итого:</span>
+      <span class="price-val" id="totalDisplay">— ₽</span>
+    </div>
+    <button class="btn-order" id="orderBtn" onclick="submitOrder()">Оформить заказ</button>
+    <div class="success" id="successMsg">
+      ✅ Заказ оформлен! Ваш номер: <strong id="orderId"></strong>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════ БАРИСТЫ ════ -->
+<div id="barista" class="page">
+<div class="panel">
+  <div class="panel-top">
+    <h2 style="margin:0">Все заказы</h2>
+    <button class="btn-refresh" onclick="loadOrders()">🔄 Обновить</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Клиент</th>
+        <th>Телефон</th>
+        <th>Позиции</th>
+        <th>Итого</th>
+        <th>Статус</th>
+        <th>Комментарий</th>
+        <th>Время</th>
+      </tr>
+    </thead>
+    <tbody id="ordersBody">
+      <tr><td colspan="8" class="loading">Загрузка...</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<script>
+const API = 'http://localhost:8080/api';
+
+// ── Состояние ────────────────────────────────────────────────────────────────
+let menuByCategory = {};   // { "Кофе": [...variants], ... }
+let modsByType     = {};   // { "Сироп": [...mods], ... }
+let selectedCat    = null;
+let isHot          = true;
+let selectedVariantId = null;
+let selectedMods   = {};   // { modifier_type_id: Set<modifier_id> } для single, или Set для multi
+
+// ── Загрузка данных из БД ────────────────────────────────────────────────────
+
+async function init() {
+  try {
+    const [mRes, modRes] = await Promise.all([
+      fetch(`${API}/menu`),
+      fetch(`${API}/modifiers`),
+    ]);
+    menuByCategory = await mRes.json();
+    modsByType     = await modRes.json();
+
+    renderCatTabs();
+    renderMods();
+  } catch (e) {
+    document.getElementById('drinkGrid').innerHTML =
+      `<div class="loading" style="color:#e63946">Сервер недоступен: ${e.message}</div>`;
+  }
+}
+
+// ── Категории ────────────────────────────────────────────────────────────────
+
+function renderCatTabs() {
+  const cats = Object.keys(menuByCategory);
+  const tabs = document.getElementById('catTabs');
+  tabs.innerHTML = cats.map((c, i) =>
+    `<button class="cat-tab ${i===0?'active':''}" onclick="selectCat('${c}', this)">${c}</button>`
+  ).join('');
+  if (cats.length) selectCat(cats[0]);
+}
+
+function selectCat(cat, btn) {
+  selectedCat = cat;
+  selectedVariantId = null;
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderDrinks();
+  recalc();
+}
+
+// ── Напитки ──────────────────────────────────────────────────────────────────
+
+function renderDrinks() {
+  const all = menuByCategory[selectedCat] || [];
+  // Фильтрация по температуре
+  const variants = all.filter(v => v.is_hot_drink === isHot);
+
+  if (!variants.length) {
+    document.getElementById('drinkGrid').innerHTML =
+      '<div class="loading">Нет напитков для этой температуры</div>';
+    return;
+  }
+
+  document.getElementById('drinkGrid').innerHTML = variants.map(v => `
+    <div class="drink-card ${v.variant_id === selectedVariantId ? 'selected' : ''}"
+         onclick="selectVariant(${v.variant_id})">
+      <div class="d-name">${v.product_name}</div>
+      <div class="d-meta">${v.size_name} · ${v.is_hot_drink ? 'Горячий' : 'Холодный'}</div>
+      <div class="d-price">${v.price} ₽</div>
+    </div>`).join('');
+}
+
+function selectVariant(id) {
+  selectedVariantId = id;
+  renderDrinks();
+  renderMods();
+  document.getElementById('modsCard').style.display = 'block';
+  recalc();
+}
+
+function setTemp(hot) {
+  isHot = hot;
+  document.getElementById('btnHot').classList.toggle('active', hot);
+  document.getElementById('btnCold').classList.toggle('active', !hot);
+  selectedVariantId = null;
+  renderDrinks();
+  recalc();
+}
+
+// ── Модификаторы ─────────────────────────────────────────────────────────────
+
+// Типы у которых одиночный выбор (молоко)
+const SINGLE_TYPES = ['Тип молока', 'Тип кофе', 'Температура'];
+
+function renderMods() {
+  const container = document.getElementById('modsContainer');
+  container.innerHTML = '';
+
+  for (const [typeName, mods] of Object.entries(modsByType)) {
+    if (typeName === 'Температура') continue; // управляем кнопками выше
+    const isSingle = SINGLE_TYPES.includes(typeName);
+    const isMilk   = typeName === 'Тип молока';
+
+    const section = document.createElement('div');
+    section.className = 'mod-section';
+    section.innerHTML = `<h4>${typeName}${isSingle ? '' : ' (можно несколько)'}</h4>
+      <div class="chips">
+        ${mods.map(m => `
+          <button class="chip ${isMilk ? 'milk' : ''}"
+                  data-id="${m.modifier_id}"
+                  data-type="${typeName}"
+                  data-single="${isSingle}"
+                  data-price="${m.price_modifier}"
+                  onclick="toggleMod(this)">
+            ${m.name}${m.price_modifier > 0 ? ' +' + m.price_modifier + '₽' : ''}
+          </button>`).join('')}
+      </div>`;
+    container.appendChild(section);
+  }
+}
+
+function toggleMod(btn) {
+  const typeName = btn.dataset.type;
+  const isSingle = btn.dataset.single === 'true';
+
+  if (isSingle) {
+    // Снять остальные того же типа
+    document.querySelectorAll(`.chip[data-type="${typeName}"]`)
+      .forEach(b => b.classList.remove('selected'));
+    btn.classList.toggle('selected',
+      !btn.classList.contains('selected') ||
+      // если снова кликнули — снять (уже снято выше)
+      false
+    );
+    // Простой toggle с учётом что выше сняли всё
+    btn.classList.add('selected');
+  } else {
+    btn.classList.toggle('selected');
+  }
+  recalc();
+}
+
+// ── Пересчёт цены ─────────────────────────────────────────────────────────────
+
+function getSelectedModIds() {
+  return [...document.querySelectorAll('.chip.selected')]
+    .map(b => parseInt(b.dataset.id));
+}
+
+function recalc() {
+  if (!selectedVariantId) {
+    document.getElementById('totalDisplay').textContent = '— ₽';
+    return;
+  }
+
+  // Найти вариант
+  let base = 0;
+  for (const variants of Object.values(menuByCategory)) {
+    const v = variants.find(x => x.variant_id === selectedVariantId);
+    if (v) { base = v.price; break; }
+  }
+
+  // Сумма модификаторов
+  const extras = getSelectedModIds().reduce((sum, id) => {
+    for (const mods of Object.values(modsByType)) {
+      const m = mods.find(x => x.modifier_id === id);
+      if (m) return sum + m.price_modifier;
+    }
+    return sum;
+  }, 0);
+
+  document.getElementById('totalDisplay').textContent = (base + extras) + ' ₽';
+}
+
+// ── Отправить заказ ───────────────────────────────────────────────────────────
+
+async function submitOrder() {
+  const name    = document.getElementById('name').value.trim();
+  const phone   = document.getElementById('phone').value.trim();
+  const comment = document.getElementById('comment').value.trim();
+
+  if (!name || !phone) { alert('Заполни имя и телефон!'); return; }
+  if (!selectedVariantId) { alert('Выбери напиток!'); return; }
+
+  const btn = document.getElementById('orderBtn');
+  btn.disabled = true;
+  btn.textContent = 'Отправляем...';
+
+  try {
+    const res = await fetch(`${API}/orders`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        customer_name:         name,
+        customer_phone:        phone,
+        special_instructions:  comment,
+        items: [{
+          variant_id:   selectedVariantId,
+          quantity:     1,
+          modifier_ids: getSelectedModIds(),
+        }],
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+
+    document.getElementById('orderId').textContent = '#' + data.order_id;
+    document.getElementById('successMsg').style.display = 'block';
+    btn.textContent = '✅ Заказ оформлен';
+
+  } catch (e) {
+    alert('Ошибка: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = 'Оформить заказ';
+  }
+}
+
+// ── Панель баристы ────────────────────────────────────────────────────────────
+
+const STATUS_LABELS = {
+  new: '🆕 Новый', confirmed: '✅ Принят',
+  preparing: '☕ Готовим', ready: '🔔 Готов',
+  completed: '✔ Выдан', cancelled: '✖ Отменён',
+};
+
+async function loadOrders() {
+  const tbody = document.getElementById('ordersBody');
+  tbody.innerHTML = '<tr><td colspan="8" class="loading">Загрузка...</td></tr>';
+  try {
+    const res = await fetch(`${API}/orders`);
+    const orders = await res.json();
+
+    if (!orders.length) {
+      tbody.innerHTML = '<tr><td colspan="8" class="loading">Заказов нет</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = orders.map(o => `
+      <tr>
+        <td><strong>#${o.order_id}</strong></td>
+        <td>${o.customer_name || '—'}</td>
+        <td>${o.customer_phone}</td>
+        <td>
+          ${o.items.map(i =>
+            `<div>× ${i.quantity} ${i.description} — <strong>${i.item_price}₽</strong></div>`
+          ).join('')}
+        </td>
+        <td><strong>${o.total_price} ₽</strong></td>
+        <td>
+          <select class="status-sel" onchange="changeStatus(${o.order_id}, this.value)">
+            ${Object.entries(STATUS_LABELS).map(([v,l]) =>
+              `<option value="${v}" ${o.status===v?'selected':''}>${l}</option>`
+            ).join('')}
+          </select>
+        </td>
+        <td class="comment-cell">${o.special_instructions || '—'}</td>
+        <td>${o.created_at}</td>
+      </tr>`).join('');
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#e63946;padding:20px">Ошибка: ${e.message}</td></tr>`;
+  }
+}
+
+async function changeStatus(id, status) {
+  await fetch(`${API}/orders/${id}/status`, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({status}),
+  });
+}
+
+// ── Переключение вкладок ──────────────────────────────────────────────────────
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'barista') loadOrders();
+}
+
+// Старт
+init();
+</script>
+</body>
+</html>
