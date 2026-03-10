@@ -17,6 +17,7 @@ void Database::connect() {
     std::cout << "[DB] Подключено к: " << conn_->dbname() << "\n";
 }
 
+
 // Один запрос с JOIN-ами — эффективнее нескольких отдельных запросов.
 
 std::vector<ProductVariant> Database::getMenu() {
