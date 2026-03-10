@@ -22,3 +22,4 @@ public:
 private:
     CoffeeOrder order_;
 };
+

@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(ProjectCafeteria
         C++/main.cpp
-        C++/order_builder.h)
+        C++/order_builder.h
+)
