@@ -8,7 +8,8 @@
 class PriceCalculator {
 public:
     PriceCalculator(std::vector<ProductVariant> variants,
-                    std::vector<Modifier> modifiers);
+                    std::vector<Modifier> modifiers)
+            : variants_(std::move(variants)), modifiers_(std::move(modifiers)) {}
 
 private:
     std::vector<ProductVariant> variants_;
@@ -22,4 +23,3 @@ public:
 private:
     CoffeeOrder order_;
 };
-
