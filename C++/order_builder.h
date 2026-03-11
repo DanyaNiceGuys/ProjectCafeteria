@@ -11,6 +11,31 @@ public:
                     std::vector<Modifier> modifiers)
             : variants_(std::move(variants)), modifiers_(std::move(modifiers)) {}
 
+    // Цена позиции = (базовая цена + модификаторы) × количество
+    double calculate(int variant_id,
+                     const std::vector<int>& modifier_ids,
+                     int quantity) const
+    {
+        double base = 0.0;
+        for (const auto& v : variants_)
+            if (v.variant_id == variant_id) { base = v.price; break; }
+
+        double extras = 0.0;
+        for (int mid : modifier_ids)
+            for (const auto& m : modifiers_)
+                if (m.modifier_id == mid) { extras += m.price_modifier; break; }
+
+        return (base + extras) * quantity;
+    }
+
+    // Итоговая цена всего заказа = сумма всех позиций
+    double calculateOrder(const CoffeeOrder& order) const {
+        double total = 0.0;
+        for (const auto& item : order.items)
+            total += calculate(item.variant_id, item.modifier_ids, item.quantity);
+        return total;
+    }
+
 private:
     std::vector<ProductVariant> variants_;
     std::vector<Modifier> modifiers_;
