@@ -3,6 +3,7 @@
 #include <vector>
 #include "coffee_order.h"
 
+
 // Классы: PriceCalculator, OrderBuilder
 
 class PriceCalculator {
@@ -75,7 +76,6 @@ public:
         return *this;
     }
 
-    // build() проверяет данные и бросает исключение если что-то не заполнено
     CoffeeOrder build() {
         if (order_.customer_name.empty())
             throw OrderValidationException("Имя клиента обязательно");
@@ -87,6 +87,9 @@ public:
         order_.status = OrderStatus::NEW;
         return std::move(order_);
     }
+
+    // Сбросить билдер для повторного использования
+    void reset() { order_ = CoffeeOrder{}; }
 
 private:
     CoffeeOrder order_;
