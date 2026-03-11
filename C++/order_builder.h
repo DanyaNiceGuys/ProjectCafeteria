@@ -1,4 +1,4 @@
-#pragma once
+ъ#pragma once
 #include <string>
 #include <vector>
 #include "coffee_order.h"
@@ -45,7 +45,6 @@ class OrderBuilder {
 public:
     OrderBuilder() = default;
 
-    // Каждый setter возвращает *this — цепочка вызовов
     OrderBuilder& setCustomerName(const std::string& name) {
         order_.customer_name = name;
         return *this;
@@ -58,6 +57,24 @@ public:
 
     OrderBuilder& setSpecialInstructions(const std::string& instructions) {
         order_.special_instructions = instructions;
+        return *this;
+    }
+
+    // Добавить позицию в заказ и прибавить к итоговой цене
+    OrderBuilder& addItem(int variant_id,
+                          int quantity,
+                          const std::vector<int>& modifier_ids,
+                          double item_price,
+                          const std::string& special_request = "")
+    {
+        OrderItem item;
+        item.variant_id      = variant_id;
+        item.quantity        = quantity;
+        item.modifier_ids    = modifier_ids;
+        item.item_price      = item_price;
+        item.special_request = special_request;
+        order_.items.push_back(std::move(item));
+        order_.total_price += item_price;
         return *this;
     }
 
