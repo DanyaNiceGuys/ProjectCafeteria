@@ -28,6 +28,14 @@ public:
         return (base + extras) * quantity;
     }
 
+    // Итоговая цена всего заказа = сумма всех позиций
+    double calculateOrder(const CoffeeOrder& order) const {
+        double total = 0.0;
+        for (const auto& item : order.items)
+            total += calculate(item.variant_id, item.modifier_ids, item.quantity);
+        return total;
+    }
+
 private:
     std::vector<ProductVariant> variants_;
     std::vector<Modifier> modifiers_;
