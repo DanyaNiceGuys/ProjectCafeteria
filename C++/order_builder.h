@@ -1,4 +1,4 @@
-ъ#pragma once
+#pragma once
 #include <string>
 #include <vector>
 #include "coffee_order.h"
@@ -11,7 +11,6 @@ public:
                     std::vector<Modifier> modifiers)
             : variants_(std::move(variants)), modifiers_(std::move(modifiers)) {}
 
-    // Цена позиции = (базовая цена + модификаторы) × количество
     double calculate(int variant_id,
                      const std::vector<int>& modifier_ids,
                      int quantity) const
@@ -28,7 +27,6 @@ public:
         return (base + extras) * quantity;
     }
 
-    // Итоговая цена всего заказа = сумма всех позиций
     double calculateOrder(const CoffeeOrder& order) const {
         double total = 0.0;
         for (const auto& item : order.items)
@@ -60,7 +58,6 @@ public:
         return *this;
     }
 
-    // Добавить позицию в заказ и прибавить к итоговой цене
     OrderBuilder& addItem(int variant_id,
                           int quantity,
                           const std::vector<int>& modifier_ids,
@@ -76,6 +73,19 @@ public:
         order_.items.push_back(std::move(item));
         order_.total_price += item_price;
         return *this;
+    }
+
+    // build() проверяет данные и бросает исключение если что-то не заполнено
+    CoffeeOrder build() {
+        if (order_.customer_name.empty())
+            throw OrderValidationException("Имя клиента обязательно");
+        if (order_.customer_phone.empty())
+            throw OrderValidationException("Телефон клиента обязателен");
+        if (order_.items.empty())
+            throw OrderValidationException("Заказ должен содержать хотя бы одну позицию");
+
+        order_.status = OrderStatus::NEW;
+        return std::move(order_);
     }
 
 private:
