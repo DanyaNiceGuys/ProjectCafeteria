@@ -45,6 +45,22 @@ class OrderBuilder {
 public:
     OrderBuilder() = default;
 
+    // Каждый setter возвращает *this — цепочка вызовов
+    OrderBuilder& setCustomerName(const std::string& name) {
+        order_.customer_name = name;
+        return *this;
+    }
+
+    OrderBuilder& setCustomerPhone(const std::string& phone) {
+        order_.customer_phone = phone;
+        return *this;
+    }
+
+    OrderBuilder& setSpecialInstructions(const std::string& instructions) {
+        order_.special_instructions = instructions;
+        return *this;
+    }
+
 private:
     CoffeeOrder order_;
 };
