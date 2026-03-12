@@ -1,0 +1,22 @@
+# Сборка
+cmake-build-debug/
+cmake-build-release/
+build/
+
+# CLion
+.idea/
+
+# Компилятор
+*.o
+*.a
+*.out
+
+# Исполняемые файлы
+Cafeteria
+CafeteriaTests
+
+# macOS
+.DS_Store
+
+# Переменные окружения
+.env
