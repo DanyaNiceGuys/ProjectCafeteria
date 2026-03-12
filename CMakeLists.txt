@@ -26,6 +26,7 @@ add_executable(Cafeteria
         main.cpp
         database.cpp
         C++/tests.cpp
+        C++/console.h
 )
 target_link_libraries(Cafeteria ${PQXX_LIBRARIES} pq)
 
