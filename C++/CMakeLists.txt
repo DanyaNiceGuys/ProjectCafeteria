@@ -1,8 +1,3 @@
-#Cafeteria       — основной исполняемый файл
-#CafeteriaTests  — unit-тесты на Google Test
-#Cafeteria - основной исполняемый файл
-#CafeteriaTests - unit-тесты на Google Test
-
 cmake_minimum_required(VERSION 3.20)
 project(Cafeteria)
 
@@ -23,15 +18,12 @@ include_directories(/opt/homebrew/opt/nlohmann-json/include)
 link_directories(${PQXX_LIBRARY_DIRS})
 link_directories(/opt/homebrew/opt/libpq/lib)
 
-# Основной исполняемый файл
 add_executable(Cafeteria
         main.cpp
         database.cpp
-        C++/tests.cpp
 )
 target_link_libraries(Cafeteria ${PQXX_LIBRARIES} pq)
 
-# Тесты (Google Test)
 find_package(GTest QUIET)
 
 if(GTest_FOUND)
