@@ -1,5 +1,7 @@
 #Cafeteria       — основной исполняемый файл
 #CafeteriaTests  — unit-тесты на Google Test
+#Cafeteria - основной исполняемый файл
+#CafeteriaTests - unit-тесты на Google Test
 
 cmake_minimum_required(VERSION 3.20)
 project(Cafeteria)
