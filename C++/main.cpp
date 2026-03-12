@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     // Путь к index.html определяется относительно исполняемого файла.
     // Работает на любой машине независимо от того где лежит проект.
 
-    const std::string htmlPath = "/Users/Chlenoedov/Desktop/proj/HTML/index.html"; // set ur path
+    const std::string htmlPath = "/Users/УКАЖИТЕ ПУТЬ/Desktop/proj/HTML/index.html"; // Указываем путь
 
     CafeteriaServer server(db, cache, htmlPath);
     server.run("localhost", 8080);
