@@ -25,8 +25,8 @@ link_directories(/opt/homebrew/opt/libpq/lib)
 add_executable(Cafeteria
         main.cpp
         database.cpp
-        C++/tests.cpp
-        C++/console.h
+        tests.cpp
+        console.h
 )
 target_link_libraries(Cafeteria ${PQXX_LIBRARIES} pq)
 

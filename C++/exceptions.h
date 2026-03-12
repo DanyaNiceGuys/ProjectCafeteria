@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <string>
 
-// Базовый класс — все исключения проекта наследуют от него
+// Базовый класс - все исключения проекта наследуют от него
 class CafeteriaException : public std::runtime_error {
 public:
     explicit CafeteriaException(const std::string& msg)

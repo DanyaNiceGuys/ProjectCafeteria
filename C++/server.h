@@ -12,13 +12,13 @@ using json = nlohmann::json;
 
 // HTTP сервер кофейни.
 //
-// RequestHandler — обрабатывает входящие запросы.
+// RequestHandler - обрабатывает входящие запросы.
 //   Каждый метод handle* = один маршрут API.
 //   Получает Database и MenuCache по ссылке (не владеет ими).
-//   Содержит OrderLogger — демонстрирует shared_ptr на практике:
+//   Содержит OrderLogger - демонстрирует shared_ptr на практике:
 //   при создании заказа и сервер, и логгер держат shared_ptr на один объект.
 //
-// CafeteriaServer — оборачивает httplib::Server.
+// CafeteriaServer - оборачивает httplib::Server.
 //   Регистрирует все маршруты и запускает сервер.
 
 class RequestHandler {
