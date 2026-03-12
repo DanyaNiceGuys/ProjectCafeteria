@@ -1,3 +1,5 @@
+#Cafeteria       — основной исполняемый файл
+#CafeteriaTests  — unit-тесты на Google Test
 #Cafeteria - основной исполняемый файл
 #CafeteriaTests - unit-тесты на Google Test
 
@@ -25,6 +27,7 @@ link_directories(/opt/homebrew/opt/libpq/lib)
 add_executable(Cafeteria
         main.cpp
         database.cpp
+        C++/tests.cpp
 )
 target_link_libraries(Cafeteria ${PQXX_LIBRARIES} pq)
 
