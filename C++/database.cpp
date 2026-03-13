@@ -19,7 +19,6 @@ void Database::connect() {
 
 
 // Один запрос с JOIN-ами — эффективнее нескольких отдельных запросов.
-
 std::vector<ProductVariant> Database::getMenu() {
     try {
         pqxx::work tx(*conn_);
