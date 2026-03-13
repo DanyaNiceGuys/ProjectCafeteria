@@ -99,7 +99,7 @@ public:
                 int              quantity   = itemJson.value("quantity", 1);
                 std::vector<int> mod_ids    = itemJson.value("modifier_ids", std::vector<int>{});
                 std::string      special    = itemJson.value("special_request", "");
-                double           price      = calc.calculate(variant_id, mod_ids, quantity);
+                double price = calc.calculate(variant_id, mod_ids, quantity).value_or(0.0);
                 builder.addItem(variant_id, quantity, mod_ids, price, special);
             }
 

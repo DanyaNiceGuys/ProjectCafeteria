@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <optional>
 #include "coffee_order.h"
 
 
-// Классы: PriceCalculator, OrderBuilder
+//Классы: PriceCalculator, OrderBuilder
 
 class PriceCalculator {
 public:
@@ -12,26 +13,32 @@ public:
                     std::vector<Modifier> modifiers)
             : variants_(std::move(variants)), modifiers_(std::move(modifiers)) {}
 
-    double calculate(int variant_id,
-                     const std::vector<int>& modifier_ids,
-                     int quantity) const
+    std::optional<double> calculate(int variant_id,
+                                    const std::vector<int>& modifier_ids,
+                                    int quantity) const
     {
-        double base = 0.0;
+        //Ищем вариант - если не нашли, возвращаем nullopt
+        std::optional<double> base;
         for (const auto& v : variants_)
             if (v.variant_id == variant_id) { base = v.price; break; }
+
+        if (!base.has_value()) return std::nullopt;
 
         double extras = 0.0;
         for (int mid : modifier_ids)
             for (const auto& m : modifiers_)
                 if (m.modifier_id == mid) { extras += m.price_modifier; break; }
 
-        return (base + extras) * quantity;
+        return (*base + extras) * quantity;
     }
 
     double calculateOrder(const CoffeeOrder& order) const {
         double total = 0.0;
-        for (const auto& item : order.items)
-            total += calculate(item.variant_id, item.modifier_ids, item.quantity);
+        for (const auto& item : order.items) {
+            auto price = calculate(item.variant_id, item.modifier_ids, item.quantity);
+            // value_or(0.0) - если позиция не найдена, считаем как 0
+            total += price.value_or(0.0);
+        }
         return total;
     }
 
@@ -88,7 +95,7 @@ public:
         return std::move(order_);
     }
 
-    // Сбросить билдер для повторного использования
+    //Сбросить билдер для повторного использования
     void reset() { order_ = CoffeeOrder{}; }
 
 private:
