@@ -91,7 +91,7 @@ ProjectCafeteria/
 │   ├── console.h
 │   └── tests.cpp
 ├── PostgreSQL/
-│   └── index.html
+│   └── cafeteria_database.sql
 ├── HTML/
 │   └── index.html
 └── CMakeLists.txt
@@ -193,7 +193,7 @@ ProjectCafeteria/
 │   ├── console.h
 │   └── tests.cpp
 ├── PostgreSQL/
-│   └── index.html
+│   └── cafeteria_database.sql
 ├── HTML/
 │   └── index.html
 └── CMakeLists.txt
