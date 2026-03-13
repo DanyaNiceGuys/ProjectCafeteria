@@ -20,6 +20,8 @@ using json = nlohmann::json;
 //
 // CafeteriaServer — оборачивает httplib::Server.
 //   Регистрирует все маршруты и запускает сервер.
+//   Регистрирует все маршруты и запускает сервер.
+//   Регистрирует все маршруты и запускает сервер.
 
 class RequestHandler {
 public:
