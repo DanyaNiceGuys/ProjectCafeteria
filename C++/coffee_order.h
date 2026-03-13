@@ -22,6 +22,7 @@ enum class OrderStatus {
     READY,      // готов, ждёт клиента
     COMPLETED,  // выдан
     CANCELLED   // отменён
+    DELAY       // задерживается
 };
 
 // constexpr — функция вычисляется компилятором, а не в рантайме.
@@ -34,6 +35,7 @@ constexpr const char* statusToStringCE(OrderStatus s) {
         case OrderStatus::READY:     return "ready";
         case OrderStatus::COMPLETED: return "completed";
         case OrderStatus::CANCELLED: return "cancelled";
+        case OrderStatus::DELAY: return "delay";
     }
     return "new";
 }
@@ -48,6 +50,7 @@ inline OrderStatus statusFromString(const std::string& s) {
     if (s == "ready")     return OrderStatus::READY;
     if (s == "completed") return OrderStatus::COMPLETED;
     if (s == "cancelled") return OrderStatus::CANCELLED;
+    if (s == "delay") return OrderStatus::DELAY;
     return OrderStatus::NEW; // неизвестный статус → NEW
 }
 
