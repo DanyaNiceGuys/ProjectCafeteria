@@ -59,7 +59,7 @@ std::vector<ProductVariant> Database::getMenu() {
         }
         return variants;
     } catch (const DatabaseException&) {
-        throw; // перебрасываем — не оборачиваем дважды
+        throw;
     } catch (const std::exception& e) {
         throw DatabaseException(std::string("getMenu(): ") + e.what());
     }
@@ -308,7 +308,6 @@ std::vector<CoffeeOrder> Database::getOrders() {
             itemsByOrder[row["order_id"].as<int>()].push_back(std::move(item));
         }
 
-        // Прикрепляем позиции к своим заказам
         for (auto& order : orders) {
             auto it = itemsByOrder.find(order.order_id);
             if (it != itemsByOrder.end()) {
