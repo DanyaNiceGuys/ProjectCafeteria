@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     // Перед запуском выполнить: export DB_PASSWORD=твой_пароль
     const char* dbPassword = std::getenv("DB_PASSWORD");
     if (!dbPassword) {
-        dbPassword = "admin"; // значение по умолчанию для локальной разработки
+        dbPassword = "admin"; // Пароль по умолчанию
     }
 
     std::string conninfo =
