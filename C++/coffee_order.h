@@ -22,7 +22,7 @@ enum class OrderStatus {
     READY,      // готов, ждёт клиента
     COMPLETED,  // выдан
     CANCELLED   // отменён
-    DELAY
+    DELAY       // задерживается
 };
 
 // constexpr — функция вычисляется компилятором, а не в рантайме.
