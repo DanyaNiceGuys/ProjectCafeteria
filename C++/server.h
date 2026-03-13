@@ -20,9 +20,7 @@ using json = nlohmann::json;
 //
 // CafeteriaServer — оборачивает httplib::Server.
 //   Регистрирует все маршруты и запускает сервер.
-//   Регистрирует все маршруты и запускает сервер.
-//   Регистрирует все маршруты и запускает сервер.
-//   Регистрирует все маршруты и запускает сервер.
+
 
 
 class RequestHandler {
@@ -133,9 +131,7 @@ public:
         } catch (const OrderValidationException& e) {
             res.status = 400;
             res.set_content(json{{"error", e.what()}}.dump(), "application/json");
-        }catch (const OrderDelayException& e) {
-            res.status = 400;
-            res.set_content(json{{"error", e.what()}}.dump(), "application/json");
+
         } catch (const DatabaseException& e) {
             res.status = 500;
             res.set_content(json{{"error", e.what()}}.dump(), "application/json");
