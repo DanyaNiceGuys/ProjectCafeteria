@@ -29,3 +29,10 @@ public:
     explicit OrderValidationException(const std::string& msg)
         : CafeteriaException("Validation: " + msg) {}
 };
+
+// Неприемлемые литературные слова в заказе
+class OrderLiteralExceptions : public CafeteriaException {
+public:
+    explicit OrderLiteralExceptions(const std::string& msg)
+        : CafeteriaException("Unacceptable " + msg) {}
+};
